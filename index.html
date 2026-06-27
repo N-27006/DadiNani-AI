@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DadiNani AI — Voice Assistant for Elderly</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0f0a2e; font-family: 'Segoe UI', sans-serif; min-height: 100vh; padding: 20px; }
+  h1 { text-align: center; color: #fff; font-size: 28px; margin-bottom: 4px; }
+  .tagline { text-align: center; color: #c4b5f4; font-size: 14px; margin-bottom: 30px; }
+  .phone-wrap { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  .screen-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .screen-title { color: #a78bfa; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  .phone { width: 220px; background: #1a1040; border-radius: 36px; border: 6px solid #2d2060; overflow: hidden; }
+  .phone-screen { padding: 20px 16px; min-height: 400px; display: flex; flex-direction: column; align-items: center; }
+
+  /* Screen 1 - Welcome */
+  .app-title { font-size: 22px; font-weight: 600; color: #fff; text-align: center; margin-bottom: 4px; }
+  .app-sub { font-size: 11px; color: #c4b5f4; text-align: center; margin-bottom: 20px; }
+  .mic-circle { width: 76px; height: 76px; border-radius: 50%; background: #7c3aed; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+  .mic-circle i { font-size: 34px; color: #fff; }
+  .mode-btn { width: 100%; padding: 10px 14px; border-radius: 12px; border: none; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-blind { background: #dc2626; color: #fff; }
+  .btn-illiterate { background: #d97706; color: #fff; }
+  .btn-literate { background: #16a34a; color: #fff; }
+  .auto-detect { font-size: 10px; color: #a78bfa; text-align: center; margin-top: 4px; }
+
+  /* Screen 2 - Blind */
+  .blind-screen { background: #0a0a0a; }
+  .screen-label { font-size: 10px; color: #a78bfa; text-align: center; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
+  .blind-mic { width: 84px; height: 84px; border-radius: 50%; background: #7c3aed; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .blind-greeting { color: #fff; font-size: 14px; text-align: center; margin-bottom: 8px; font-weight: 600; }
+  .blind-prompt { color: #ccc; font-size: 11px; text-align: center; margin-bottom: 8px; line-height: 1.5; }
+  .blind-hint { color: #888; font-size: 10px; text-align: center; margin-bottom: 16px; }
+  .shake-hint { background: #dc2626; border-radius: 10px; padding: 10px 12px; color: #fff; font-size: 10px; text-align: center; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+  /* Screen 3 - Illiterate */
+  .illit-screen { background: #1e1b4b; }
+  .icon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 12px; }
+  .icon-card { background: #312e81; border-radius: 14px; padding: 14px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .icon-card i { font-size: 30px; }
+  .icon-card span { font-size: 11px; color: #c7d2fe; text-align: center; font-weight: 500; }
+  .sos-btn { width: 100%; background: #dc2626; border-radius: 12px; padding: 12px; color: #fff; font-size: 13px; font-weight: 600; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer; }
+  .no-read { font-size: 9px; color: #a5b4fc; text-align: center; margin-top: 8px; }
+
+  /* Screen 4 - Literate */
+  .lit-screen { background: #0f172a; }
+  .status-bar { background: #1e293b; border-radius: 10px; padding: 8px 12px; width: 100%; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+  .status-text { font-size: 10px; color: #94a3b8; }
+  .scheme-item { background: #1e293b; border-radius: 10px; padding: 10px 12px; width: 100%; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  .scheme-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .scheme-title { font-size: 11px; color: #e2e8f0; font-weight: 600; }
+  .scheme-sub { font-size: 9px; color: #64748b; margin-top: 2px; }
+  .voice-bar { background: #7c3aed; border-radius: 20px; padding: 10px 16px; color: #fff; font-size: 11px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; width: 100%; border: none; cursor: pointer; font-weight: 600; }
+
+  .footer { text-align: center; color: #6b7280; font-size: 11px; margin-top: 30px; padding-bottom: 20px; }
+  .badge { display: inline-block; background: #7c3aed; color: #fff; font-size: 10px; padding: 3px 10px; border-radius: 20px; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<h1>🎙️ DadiNani AI</h1>
+<p class="tagline">Boliye... Main Sunta Hoon — Voice Assistant for India's Elderly</p>
+<div style="text-align:center"><span class="badge">AWAAZ Theme — Build for Good 2026</span></div>
+
+<div class="phone-wrap">
+
+  <!-- Screen 1: Welcome -->
+  <div class="screen-wrap">
+    <div class="screen-title">Screen 1 — Welcome</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="app-title">DadiNani AI</div>
+        <div class="app-sub">Boliye... Main Sunta Hoon</div>
+        <div class="mic-circle"><i class="ti ti-microphone"></i></div>
+        <button class="mode-btn btn-blind"><i class="ti ti-eye-off" style="font-size:16px"></i> Blind Mode</button>
+        <button class="mode-btn btn-illiterate"><i class="ti ti-photo" style="font-size:16px"></i> Illiterate Mode</button>
+        <button class="mode-btn btn-literate"><i class="ti ti-layout-dashboard" style="font-size:16px"></i> Literate Mode</button>
+        <p class="auto-detect">✨ Auto-detects your mode</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 2: Blind Mode -->
+  <div class="screen-wrap">
+    <div class="screen-title">Screen 2 — Blind Mode</div>
+    <div class="phone">
+      <div class="phone-screen blind-screen">
+        <div class="screen-label">🔴 Blind Mode</div>
+        <div class="blind-mic"><i class="ti ti-microphone" style="font-size:38px; color:#fff;"></i></div>
+        <div class="blind-greeting">Namaste Thaatha! 🙏</div>
+        <div class="blind-prompt">Boliye — pension, doctor<br>ya family call chahiye?</div>
+        <div class="blind-hint">No screen needed<br>Just speak naturally</div>
+        <div class="shake-hint"><i class="ti ti-alert-triangle" style="font-size:13px"></i> Shake phone = Emergency call</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 3: Illiterate Mode -->
+  <div class="screen-wrap">
+    <div class="screen-title">Screen 3 — Illiterate Mode</div>
+    <div class="phone">
+      <div class="phone-screen illit-screen">
+        <div class="screen-label">🟡 Illiterate Mode</div>
+        <div class="icon-grid">
+          <div class="icon-card"><i class="ti ti-coin-rupee" style="color:#fbbf24"></i><span>Pension</span></div>
+          <div class="icon-card"><i class="ti ti-stethoscope" style="color:#34d399"></i><span>Doctor</span></div>
+          <div class="icon-card"><i class="ti ti-users" style="color:#60a5fa"></i><span>Family Call</span></div>
+          <div class="icon-card"><i class="ti ti-file-text" style="color:#c084fc"></i><span>Documents</span></div>
+        </div>
+        <button class="sos-btn"><i class="ti ti-phone-call" style="font-size:15px"></i> SOS Emergency</button>
+        <p class="no-read">Big icons — no reading needed</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 4: Literate Mode -->
+  <div class="screen-wrap">
+    <div class="screen-title">Screen 4 — Literate Mode</div>
+    <div class="phone">
+      <div class="phone-screen lit-screen">
+        <div class="screen-label">🟢 Literate Mode</div>
+        <div class="status-bar"><div class="status-dot"></div><div class="status-text">Pension active — next: Jul 1</div></div>
+        <div class="scheme-item">
+          <div class="scheme-icon" style="background:#422006"><i class="ti ti-coin-rupee" style="font-size:15px; color:#fbbf24"></i></div>
+          <div><div class="scheme-title">IGNOAPS Pension</div><div class="scheme-sub">₹200/month • Active</div></div>
+        </div>
+        <div class="scheme-item">
+          <div class="scheme-icon" style="background:#052e16"><i class="ti ti-heart" style="font-size:15px; color:#34d399"></i></div>
+          <div><div class="scheme-title">Ayushman Bharat</div><div class="scheme-sub">₹5 lakh cover • Enrolled</div></div>
+        </div>
+        <div class="scheme-item">
+          <div class="scheme-icon" style="background:#1e1b4b"><i class="ti ti-eye" style="font-size:15px; color:#a78bfa"></i></div>
+          <div><div class="scheme-title">ADIP Scheme</div><div class="scheme-sub">Blind/disabled aid • Apply</div></div>
+        </div>
+        <div class="scheme-item">
+          <div class="scheme-icon" style="background:#083344"><i class="ti ti-phone" style="font-size:15px; color:#67e8f9"></i></div>
+          <div><div class="scheme-title">Helpline 14567</div><div class="scheme-sub">Senior citizen support</div></div>
+        </div>
+        <button class="voice-bar"><i class="ti ti-microphone" style="font-size:15px"></i> Speak to navigate</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="footer">DadiNani AI — Built for Build for Good 2026 | Theme: AWAAZ | Narayana Engineering College, Nellore</p>
+
+</body>
+</html>
