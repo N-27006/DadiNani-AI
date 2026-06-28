@@ -1,1 +1,17 @@
-DadiNani AI is a voice-first digital companion designed to help blind, illiterate, and elderly citizens access essential services through simple, accessible AI interactions.
+# DadiNani AI
+
+A voice-first AI companion designed to help elderly citizens access healthcare, government schemes, and emergency support through simple voice interactions.
+
+## Features
+- Voice-first interaction
+- Blind Mode
+- Illiterate Mode
+- Literate Mode
+
+## Tech Stack
+- HTML
+- CSS
+- JavaScript
+
+## Demo
+https://N-27006.github.io/DadiNani-AI/
